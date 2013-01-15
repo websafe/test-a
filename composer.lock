@@ -233,18 +233,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser",
-                "reference": "222c9612ab9c65551b7febd38cbb0fa685b0e0db"
+                "reference": "fbaa1e5fc313f533b8e98bb86fc9ddbb4ee8beff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/nikic/PHP-Parser/archive/222c9612ab9c65551b7febd38cbb0fa685b0e0db.zip",
-                "reference": "222c9612ab9c65551b7febd38cbb0fa685b0e0db",
+                "url": "https://github.com/nikic/PHP-Parser/archive/fbaa1e5fc313f533b8e98bb86fc9ddbb4ee8beff.zip",
+                "reference": "fbaa1e5fc313f533b8e98bb86fc9ddbb4ee8beff",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
             },
-            "time": "2012-12-21 12:28:35",
+            "time": "2013-01-15 16:30:14",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -1546,12 +1546,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "50bd2fce6d718c5a02a41b2d5146591526743507"
+                "reference": "6705064d777f193286f4d32d98aa426197146cfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/archive/50bd2fce6d718c5a02a41b2d5146591526743507.zip",
-                "reference": "50bd2fce6d718c5a02a41b2d5146591526743507",
+                "url": "https://github.com/zendframework/zf2/archive/6705064d777f193286f4d32d98aa426197146cfb.zip",
+                "reference": "6705064d777f193286f4d32d98aa426197146cfb",
                 "shasum": ""
             },
             "require": {
@@ -1620,7 +1620,7 @@
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
                 "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
             },
-            "time": "2013-01-15 14:43:15",
+            "time": "2013-01-15 17:32:47",
             "bin": [
                 "bin/classmap_generator.php"
             ],

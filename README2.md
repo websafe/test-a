@@ -9,7 +9,6 @@ a [PHPUnit] test suite, composer.json and more.
  + Current build based on [Michel Fortin]'s **[PHP Markdown]** [branch: extra]
    commit:
 
-something added
 
 Features
 --------------------------------------------------------------------------------

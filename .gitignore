@@ -1,0 +1,6 @@
+build
+data
+doc
+temp
+vendor
+composer.lock

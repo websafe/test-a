@@ -1,0 +1,10 @@
+[31;31mSome settings on your machine may cause stability issues with Composer.[0m
+[31;31mIf you encounter issues, try to change the following:[0m
+[33;33m
+Your PHP (5.3.3) is quite old, upgrading to PHP 5.3.4 or higher is recommended.
+Composer works with 5.3.2+ for most people, but there might be edge case issues.[0m
+
+[33;33mDownloading...[0m
+[0;32m
+Composer successfully installed to: /mnt/sandbox/2013/websafe-buildscript-for-michelf-php-markdown/build/vendor/bin/composer.phar[0m[33;33m
+Use it: php vendor/bin/composer.phar[0m

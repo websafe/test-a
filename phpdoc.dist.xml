@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>Michelf\Markdown\Parser</title>
+    <parser>
+        <target>doc/phpdoc</target>
+        <markers>
+            <item>TODO</item>
+            <item>FIX</item>
+            <item>FIXME</item>
+            <item>FIXED</item>
+            <item>XXX</item>
+        </markers>
+        <extensions>
+            <extension>php</extension>
+        </extensions>
+        <visibility>public,protected,private,inherited</visibility>
+    </parser>
+    <transformer>
+        <target>doc</target>
+    </transformer>
+    <transformations>
+        <template name="responsive" />
+    </transformations>
+    <files>
+        <directory>src</directory>
+        <ignore>src/tests/Bootstrap.php</ignore>
+    </files>
+</phpdoc>

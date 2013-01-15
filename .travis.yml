@@ -1,0 +1,16 @@
+language: php
+php:
+  - "5.3"
+  - "5.4"
+
+script: "ant dev"
+
+before_script:
+ - phpenv rehash > /dev/null
+
+notifications:
+  email:
+    recipients:
+     - ts@websafe.pl
+    on_success: always
+    on_failure: always

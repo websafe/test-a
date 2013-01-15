@@ -1,0 +1,19 @@
+PHPUnit 3.7.13-1-gc80d9a4 by Sebastian Bergmann.
+
+
+Starting test 'MichelfTest\Markdown\Parser\CoreParserTest::testClassCanInstantiate'.
+.
+Starting test 'MichelfTest\Markdown\Parser\CoreParserTest::testCoreFeatures'.
+.
+Starting test 'MichelfTest\Markdown\Parser\CoreParserTest::testDatasets'.
+.
+Starting test 'MichelfTest\Markdown\Parser\ExtraParserTest::testClassCanInstantiate'.
+.
+Starting test 'MichelfTest\Markdown\Parser\ExtraParserTest::testCoreFeatures'.
+.
+Starting test 'MichelfTest\Markdown\Parser\ExtraParserTest::testDatasets'.
+.
+
+Time: 0 seconds, Memory: 6.00Mb
+
+OK (6 tests, 36 assertions)

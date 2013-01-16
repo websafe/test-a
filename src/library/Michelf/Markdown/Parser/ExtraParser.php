@@ -17,14 +17,13 @@ use Michelf\Markdown\Parser\CoreParser;
  *
  * What was modified?
  *
+ * + Classes were extracted into separate files.
+ * + Classes were renamed.
  * + A namespace was added.
- * + Classes was renamed.
  * + The class constructor was renamed.
- * + Some unused constant were removed
- * + Classes were split into separate files
- * + Code was formatted using php-cs-fixer
+ * + Some unused constants were removed.
+ * + Code was formatted using PHP-CS-Fixer
  * + Documentation was generated using phpdocumentor2
- * + ..
  *
  * @package Michelf_Markdown_Parser
  * @author Michel Fortin, <http://michelf.com/>

@@ -107,6 +107,56 @@ Easy?
 
 
 
+Quickstart for developers and Markdown hackers ;)
+--------------------------------------------------------------------------------
+
+Clone this repos master branch:
+
+~~~~
+git clone https://github.com/websafe/test-a.git
+cd test-a
+~~~~
+
+
+Now create a `composer.json` file:
+
+
+~~~~
+ant setup-dev-env
+~~~~
+
+Now You should have all required tools and dependecies installed in `vendor/`,
+accessible via `vendor/bin/*`, or better [Ant].
+
+
+
+~~~~
+ant phpdoc
+~~~~
+
+PHP Documentation is created in `doc/phpdoc/`.
+
+
+Now run some tests:
+
+~~~~
+ant phpunit
+~~~~
+
+
+You think any of the dependencies may have changed? Update Your dev environment
+
+~~~~
+ant update-dev-env
+~~~~
+
+this will update Composer and all dependencies and recreate missing dirs.
+
+
+
+
+
+
 Milestones
 --------------------------------------------------------------------------------
 

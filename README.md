@@ -45,6 +45,7 @@ Quickstart
 
 Create a project directory:
 
+
 ~~~~
 mkdir my-markdown-test
 cd my-markdown-test
@@ -52,6 +53,7 @@ cd my-markdown-test
 
 
 Now create a `composer.json` file in project's root, with this content:
+
 
 ~~~~ json
 {
@@ -76,6 +78,7 @@ Now create a `composer.json` file in project's root, with this content:
 
 And run composer:
 
+
 ~~~~
 composer -v update
 ~~~~
@@ -83,11 +86,14 @@ composer -v update
 
 Create a PHP script in your projetc's root:
 
+
 ~~~~
 touch my-markdown-test.php
 ~~~~
 
+
 with this content:
+
 
 ~~~~ php
 <?php
@@ -99,7 +105,9 @@ $mp = new Michelf\Markdown\Parser\ExtraParser();
 echo $mp->transform("Hello!\n======\nIs it me you're looking for?");
 ~~~~
 
+
 will return:
+
 
 ~~~~ html
 <h1>Hello!</h1>

@@ -51,16 +51,7 @@ cd my-markdown-test
 ~~~~
 
 
-Now create a `composer.json` file:
-
-
-~~~~
-touch composer.json
-~~~~
-
-
-with this content:
-
+Now create a `composer.json` file in project's root, with this content:
 
 ~~~~ json
 {
@@ -68,13 +59,17 @@ with this content:
     "type": "library",
     "description": "My Markdown test",
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "websafe/test-a": "*"
     },
-    "autoload": {
-            "psr-0": {
-            "Michelf\\Markdown\\Parser\\": "src/library",
-            }
-    }
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/websafe/test-a.git",
+            "reference": "origin/master"
+        }
+    ]
 }
 ~~~~
 
@@ -96,11 +91,23 @@ with this content:
 
 ~~~~ php
 <?php
+//
 require 'vendor/autoload.php';
-use Michelf\Markdown\Parser\Extra as MarkdownParser;
-$mp = new MarkdownParser();
-echo $mp->transform("This is a test\n==============\n\nBlah blah\n\n");
+//
+$mp = new Michelf\Markdown\Parser\ExtraParser();
+//
+echo $mp->transform("Hello!\n======\nIs it me you're looking for?");
 ~~~~
+
+will return:
+
+~~~~ html
+<h1>Hello!</h1>
+
+<p>Is it me you're looking for?</p>
+
+~~~~
+
 
 Easy?
 

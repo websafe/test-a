@@ -5,7 +5,7 @@ websafe-michelf-markdown-parser-psr
 [Michel Fortin]'s **[PHP Markdown]** library ([branch: extra]), enhanced with
 a [PHPUnit] test suite, composer.json and more.
 
- + Current build status: [![Build Status](https://travis-ci.org/websafe/test-a.png?branch=master)](https://travis-ci.org/websafe/test-a/)
+ + Current build status: [![Build Status](https://travis-ci.org/websafe/test-a.png?branch=master,develop)](https://travis-ci.org/websafe/test-a/)
  + Current build based on [Michel Fortin]'s **[PHP Markdown]** [branch: extra]
    commit:
 

@@ -4,3 +4,5 @@ doc
 temp
 vendor
 composer.lock
+.project
+.settings

@@ -1,6 +1,7 @@
 <?php
 /**
- * Bootstrap for Michelf Markdown Parser TestSuite
+ * General Bootstrap for PHPUnit tests
+ *
  * @category Websafe
  * @package MichelfTest_Markdown_Parser
  */
@@ -17,15 +18,33 @@ use RuntimeException;
 error_reporting(E_ALL | E_STRICT);
 chdir(__DIR__);
 
+/**
+ * General Bootstrap for PHPUnit tests
+ *
+ * @category Websafe
+ * @package MichelfTest_Markdown_Parser
+ */
 class Bootstrap
 {
 
+    /**
+     * Service manager
+     */
     protected static $serviceManager;
 
+    /**
+     * Config
+     */
     protected static $config;
 
+    /**
+     * Bootstrap
+     */
     protected static $bootstrap;
 
+    /**
+     * Init
+     */
     public static function init ()
     {
         // Load the user-defined test configuration file, if it exists; otherwise, load
@@ -70,16 +89,27 @@ class Bootstrap
         static::$config = $config;
     }
 
+    /**
+     * getServiceManager
+     */
     public static function getServiceManager ()
     {
         return static::$serviceManager;
     }
 
+    /**
+     * getConfig
+     */
     public static function getConfig ()
     {
         return static::$config;
     }
 
+    /**
+     * initAutoloader
+     *
+     * @throws RuntimeException
+     */
     protected static function initAutoloader ()
     {
         $vendorPath = static::findParentPath('vendor');
@@ -109,6 +139,12 @@ class Bootstrap
             ));
     }
 
+    /**
+     * findParentPath
+     *
+     * @param  unknown_type $path
+     * @return boolean      string
+     */
     protected static function findParentPath ($path)
     {
         $dir = __DIR__;

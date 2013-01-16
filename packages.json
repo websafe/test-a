@@ -1,0 +1,8 @@
+{
+    "packages": {
+        "websafe/test-a": {
+            "dev-master": { @composer.json },
+            "dev-develop": { @composer.json }
+        }
+    }
+}

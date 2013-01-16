@@ -18,6 +18,9 @@ use DirectoryIterator;
 
 /**
  * Abstract test class for all markdown filter variations.
+ *
+ * @category Websafe
+ * @package MichelfTest_Markdown_Parser
  */
 abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
 {
@@ -69,6 +72,9 @@ abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
         );
     }
     /* @formatter:on */
+    /**
+     * Run tests on datasets
+     */
     public function testDatasets ()
     {
         $datasets = array();

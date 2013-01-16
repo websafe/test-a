@@ -17,6 +17,9 @@ use MichelfTest\Markdown\Parser\AbstractParserTest;
 
 /**
  * PHPUnit test class for \Michelf\Markdown\Parser\ExtraParser.
+ *
+ * @category Websafe
+ * @package MichelfTest_Markdown_Parser
  */
 class ExtraParserTest extends AbstractParserTest
 {

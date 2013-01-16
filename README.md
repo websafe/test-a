@@ -5,10 +5,10 @@ websafe-michelf-markdown-parser-psr
 [Michel Fortin]'s **[PHP Markdown]** library ([branch: extra]), enhanced with
 a [PHPUnit] test suite, composer.json and more.
 
- + Current build status: [![Build Status](https://travis-ci.org/websafe/test-a.png?branch=master,develop)](https://travis-ci.org/websafe/test-a/)
+ + Current build status - master: [![Build Status](https://travis-ci.org/websafe/test-a.png?branch=master)](https://travis-ci.org/websafe/test-a/)
+ + Current build status - develop: [![Build Status](https://travis-ci.org/websafe/test-a.png?branch=develop)](https://travis-ci.org/websafe/test-a/)
  + Current build based on [Michel Fortin]'s **[PHP Markdown]** [branch: extra]
    commit:
-
 
 
 
@@ -18,7 +18,6 @@ Table of content
  1. [Features](#features)
  2. [Quickstart](#quickstart)
  3. [Milestones](#milestones)
-
 
 
 
@@ -39,12 +38,10 @@ Features
 
 
 
-
 Quickstart
 --------------------------------------------------------------------------------
 
 Create a project directory:
-
 
 ~~~~
 mkdir my-markdown-test
@@ -53,7 +50,6 @@ cd my-markdown-test
 
 
 Now create a `composer.json` file in project's root, with this content:
-
 
 ~~~~ json
 {
@@ -78,7 +74,6 @@ Now create a `composer.json` file in project's root, with this content:
 
 And run composer:
 
-
 ~~~~
 composer -v update
 ~~~~
@@ -86,14 +81,12 @@ composer -v update
 
 Create a PHP script in your projetc's root:
 
-
 ~~~~
 touch my-markdown-test.php
 ~~~~
 
 
 with this content:
-
 
 ~~~~ php
 <?php
@@ -108,7 +101,6 @@ echo $mp->transform("Hello!\n======\nIs it me you're looking for?");
 
 will return:
 
-
 ~~~~ html
 <h1>Hello!</h1>
 
@@ -118,7 +110,6 @@ will return:
 
 
 Easy?
-
 
 
 
@@ -135,15 +126,13 @@ cd test-a
 
 Now create a `composer.json` file:
 
-
 ~~~~
 ant setup-dev-env
 ~~~~
 
+
 Now You should have all required tools and dependecies installed in `vendor/`,
 accessible via `vendor/bin/*`, or better [Ant].
-
-
 
 ~~~~
 ant phpdoc
@@ -169,12 +158,8 @@ this will update Composer and all dependencies and recreate missing dirs.
 
 
 
-
-
-
 Milestones
 --------------------------------------------------------------------------------
-
 
 ### 0.0
 
@@ -197,7 +182,6 @@ Milestones
 
 
 
-
 [Michel Fortin]: http://michelf.ca/
 [PHP Markdown]: https://github.com/michelf/php-markdown/
 [branch: extra]: https://github.com/michelf/php-markdown/tree/extra
@@ -214,7 +198,4 @@ Milestones
 [PHPUnit]: https://github.com/sebastianbergmann/phpunit
 [Composer]: http://getcomposer.org/
 [PHP_CodeSniffer]: https://github.com/squizlabs/PHP_CodeSniffer
-
-
-
 

@@ -14,13 +14,13 @@ ready and more.
     <th>Based on commit</th>
   </tr>
   <tr>
-    <td>`master`</td>
-    <td>[![Build Status](https://travis-ci.org/websafe/test-a.png?branch=master)](https://travis-ci.org/websafe/test-a/)</td>
+    <td><code>master</code></td>
+    <td><a href="https://travis-ci.org/websafe/test-a/" title="branch master"><img src="https://travis-ci.org/websafe/test-a.png?branch=master" /></a></td>
     <td></td>
   </tr>
   <tr>
-    <td>`develop`</td>
-    <td>[![Build Status](https://travis-ci.org/websafe/test-a.png?branch=develop)](https://travis-ci.org/websafe/test-a/)</td>
+    <td><code>develop</code></td>
+    <td><a href="https://travis-ci.org/websafe/test-a/" title="branch develop"><img src="https://travis-ci.org/websafe/test-a.png?branch=develop" /></a></td>
     <td></td>
   </tr>
 </table>
@@ -176,7 +176,7 @@ this will update [Composer] with all dependencies and recreate missing dirs.
 Milestones
 --------------------------------------------------------------------------------
 
-### 0.0
+### 0.0.1
 
  + [PSR-0] autoloader interoperability.
  + [Composer] ready.
@@ -186,12 +186,12 @@ Milestones
  + [Continuous integration] with [Travis CI].
 
 
-### 0.1
+### 0.1.0
 
  + PSR-1
 
 
-### 0.2
+### 0.2.0
 
  + PSR-2
 

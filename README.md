@@ -10,6 +10,7 @@ a [PHPUnit] test suite, composer.json and more.
    commit:
 
 # adding some crazy idea 01
+# adding some crazy idea 01
 
 
 Table of content

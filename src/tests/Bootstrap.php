@@ -1,6 +1,13 @@
 <?php
-namespace MichelfTest; //Change this namespace for your test
+/**
+ * Bootstrap for Michelf Markdown Parser TestSuite
+ * @category Websafe
+ * @package MichelfTest_Markdown_Parser
+ */
+//
+namespace MichelfTest;
 
+//
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
@@ -12,11 +19,14 @@ chdir(__DIR__);
 
 class Bootstrap
 {
+
     protected static $serviceManager;
+
     protected static $config;
+
     protected static $bootstrap;
 
-    public static function init()
+    public static function init ()
     {
         // Load the user-defined test configuration file, if it exists; otherwise, load
         if (is_readable(__DIR__ . '/TestConfig.php')) {
@@ -30,22 +40,24 @@ class Bootstrap
         if (isset($testConfig['module_listener_options']['module_paths'])) {
             $modulePaths = $testConfig['module_listener_options']['module_paths'];
             foreach ($modulePaths as $modulePath) {
-                if (($path = static::findParentPath($modulePath)) ) {
+                if (($path = static::findParentPath($modulePath))) {
                     $zf2ModulePaths[] = $path;
                 }
             }
         }
 
-        $zf2ModulePaths  = implode(PATH_SEPARATOR, $zf2ModulePaths) . PATH_SEPARATOR;
-        $zf2ModulePaths .= getenv('ZF2_MODULES_TEST_PATHS') ?: (defined('ZF2_MODULES_TEST_PATHS') ? ZF2_MODULES_TEST_PATHS : '');
+        $zf2ModulePaths = implode(PATH_SEPARATOR, $zf2ModulePaths) .
+             PATH_SEPARATOR;
+        $zf2ModulePaths .= getenv('ZF2_MODULES_TEST_PATHS') ?  : (defined(
+            'ZF2_MODULES_TEST_PATHS') ? ZF2_MODULES_TEST_PATHS : '');
 
         static::initAutoloader();
 
         // use ModuleManager to load this module and it's dependencies
         $baseConfig = array(
             'module_listener_options' => array(
-                'module_paths' => explode(PATH_SEPARATOR, $zf2ModulePaths),
-            ),
+                'module_paths' => explode(PATH_SEPARATOR, $zf2ModulePaths)
+            )
         );
 
         $config = ArrayUtils::merge($baseConfig, $testConfig);
@@ -58,50 +70,53 @@ class Bootstrap
         static::$config = $config;
     }
 
-    public static function getServiceManager()
+    public static function getServiceManager ()
     {
         return static::$serviceManager;
     }
 
-    public static function getConfig()
+    public static function getConfig ()
     {
         return static::$config;
     }
 
-    protected static function initAutoloader()
+    protected static function initAutoloader ()
     {
         $vendorPath = static::findParentPath('vendor');
 
         if (is_readable($vendorPath . '/autoload.php')) {
             $loader = include $vendorPath . '/autoload.php';
         } else {
-            $zf2Path = getenv('ZF2_PATH') ?: (defined('ZF2_PATH') ? ZF2_PATH : (is_dir($vendorPath . '/ZF2/library') ? $vendorPath . '/ZF2/library' : false));
+            $zf2Path = getenv('ZF2_PATH') ?  : (defined('ZF2_PATH') ? ZF2_PATH : (is_dir(
+                $vendorPath . '/ZF2/library') ? $vendorPath . '/ZF2/library' : false));
 
-            if (!$zf2Path) {
-                throw new RuntimeException('Unable to load ZF2. Run `php composer.phar install` or define a ZF2_PATH environment variable.');
+            if (! $zf2Path) {
+                throw new RuntimeException(
+                    'Unable to load ZF2. Run `php composer.phar install` or define a ZF2_PATH environment variable.');
             }
 
             include $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
-
         }
 
-        AutoloaderFactory::factory(array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'autoregister_zf' => true,
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
-                ),
-            ),
-        ));
+        AutoloaderFactory::factory(
+            array(
+                'Zend\Loader\StandardAutoloader' => array(
+                    'autoregister_zf' => true,
+                    'namespaces' => array(
+                        __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__
+                    )
+                )
+            ));
     }
 
-    protected static function findParentPath($path)
+    protected static function findParentPath ($path)
     {
         $dir = __DIR__;
         $previousDir = '.';
-        while (!is_dir($dir . '/' . $path)) {
+        while (! is_dir($dir . '/' . $path)) {
             $dir = dirname($dir);
-            if ($previousDir === $dir) return false;
+            if ($previousDir === $dir)
+                return false;
             $previousDir = $dir;
         }
 

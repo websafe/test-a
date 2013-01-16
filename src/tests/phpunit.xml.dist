@@ -3,7 +3,7 @@
 <phpunit bootstrap="Bootstrap.php">
     <testsuites>
         <testsuite name="Michelf Markdown Parser TestSuite">
-            <directory>./MichelfTest/Markdown/Parser</directory>
+            <directory>MichelfTest/Markdown/Parser</directory>
          </testsuite>
     </testsuites>
 </phpunit>

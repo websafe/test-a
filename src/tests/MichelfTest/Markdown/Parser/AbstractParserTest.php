@@ -1,12 +1,13 @@
 <?php
 /**
- * Michelf Markdown Filter Markdown TestSuite
+ * Michelf Markdown Parser TestSuite
  *
  * @link http://github.com/websafe/websafe-filter-markdown
  * @author Thomas Szteliga <ts@websafe.pl>
  * @copyright Copyright (c) 20012-2013 WEBSAFE.PL, https://websafe.pl/
  * @license http://websafe.pl/license/bsd-3-clause BSD-3-Clause
- * @package WebsafeTest_Filter_Markdown
+ * @category Websafe
+ * @package MichelfTest_Markdown_Parser
  */
 /**
  */
@@ -17,9 +18,6 @@ use DirectoryIterator;
 
 /**
  * Abstract test class for all markdown filter variations.
- *
- * @category Websafe
- * @package WebsafeTest_Filter_Markdown
  */
 abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
 {
@@ -103,7 +101,11 @@ abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
         //print_r($tests);
 
         foreach ($datasets as $dataSet) {
+
+            echo 'Entering test case collection: ' . $dataSet . PHP_EOL;
+
             foreach ($tests as $testDataId) {
+                echo 'Running test : ' . $testDataId . PHP_EOL;
                 $markdown = file_get_contents(
                     __DIR__ . '/testdata/' . $dataSet . '/' . $testDataId .
                          '.md');

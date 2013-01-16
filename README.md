@@ -10,12 +10,14 @@ a [PHPUnit] test suite, composer.json and more.
    commit:
 
 
+
 Table of content
 --------------------------------------------------------------------------------
 
  1. [Features](#features)
- 2. [Milestones](#milestones)
- 3. [Quickstart](#quickstart)
+ 2. [Quickstart](#quickstart)
+ 3. [Milestones](#milestones)
+
 
 
 Features
@@ -49,17 +51,14 @@ Milestones
  + [Continuous integration] with [Travis CI].
 
 
-
 ### 0.1
 
  + PSR-1
 
 
-
 ### 0.2
 
  + PSR-2
-
 
 
 

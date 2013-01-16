@@ -10,6 +10,14 @@ a [PHPUnit] test suite, composer.json and more.
    commit:
 
 
+Table of content
+--------------------------------------------------------------------------------
+
+ 1. [Features](#features)
+ 2. [Milestones](#milestones)
+ 3. [Quickstart](#quickstart)
+
+
 Features
 --------------------------------------------------------------------------------
 

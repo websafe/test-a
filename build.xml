@@ -151,6 +151,7 @@ Author: Thomas Szteliga <ts@websafe.pl>, https://github.com/websafe/
 		<echo message="Distclean..." />
 		<delete dir="${build.dir}" verbose="true" />
 		<delete dir="${data.dir}" verbose="true" />
+		<delete dir="${phpdoc.dir}" verbose="true" />
 		<delete dir="${doc.dir}" verbose="true" />
 		<delete dir="${temp.dir}" verbose="true" />
 		<delete dir="${vendor.dir}" verbose="true" />

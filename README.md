@@ -216,11 +216,5 @@ Milestones
 [PHP_CodeSniffer]: https://github.com/squizlabs/PHP_CodeSniffer
 
 
---------------------------------------------------------------------------------
 
-
-Below is the original PHP Markdown README.md
-
-
---------------------------------------------------------------------------------
 

@@ -199,7 +199,7 @@ Milestones
 Class hierarchy diagram
 --------------------------------------------------------------------------------
 
-<img src="/websafe/test-a/blob/master/classes.svg" />
+<img src="https://raw.github.com/websafe/test-a/master/classes.svg" />
 
 
 

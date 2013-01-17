@@ -23,7 +23,7 @@ ready, with fixed PHP code and Travis CI integration.
         </a>
     </td>
     <td>
-        <a href="https://github.com/michelf/php-markdown/commit/f5c689253dedcba2c145d67cefeb039483b9d62e">f5c689253dedcba2c145d67cefeb039483b9d62e</a>
+        <a href="https://github.com/michelf/php-markdown/commit/${{COMMIT}}">${{COMMIT}}</a>
     </td>
   </tr>
   <tr>
@@ -212,8 +212,9 @@ Milestones
 Class hierarchy diagram
 --------------------------------------------------------------------------------
 
-<embed src="https://raw.github.com/websafe/test-a/master/classes.svg" type="image/svg+xml" />
+![(https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/classes.svg)]
 
+[![(https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/classes.svg)]](https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/ "PHP documentation")
 
 
 [Michel Fortin]: http://michelf.ca/

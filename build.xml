@@ -132,6 +132,7 @@ Author: Thomas Szteliga <ts@websafe.pl>, https://github.com/websafe/
 			<arg value='--filename=*.php' />
 			<arg value='--markers=TODO,FIXME' />
 			<arg value='--template=${data.dir}/templates/responsive' />
+			<arg value='--title=${project.name}' />
 		</exec>
 	</target>
 

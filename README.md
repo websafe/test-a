@@ -199,8 +199,7 @@ Milestones
 Class hierarchy diagram
 --------------------------------------------------------------------------------
 
-![Class hierarchy diagram](/websafe/test-a/blob/master/classes.svg)
-
+<embed src="https://raw.github.com/websafe/test-a/master/classes.svg" type="image/svg+xml" />
 
 
 [Michel Fortin]: http://michelf.ca/

@@ -1,6 +1,6 @@
 {
     "packages": {
-        "websafe/test-a": {
+        "websafe/websafe-michelf-markdown-parser-psr": {
             "dev-master": { @composer.json },
             "dev-develop": { @composer.json }
         }

@@ -22,7 +22,11 @@ ready, with fixed PHP code and Travis CI integration.
             />
         </a>
     </td>
-    <td></td>
+    <td>
+        <a href="https://github.com/michelf/php-markdown/commit/f5c689253dedcba2c145d67cefeb039483b9d62e
+">f5c689253dedcba2c145d67cefeb039483b9d62e
+</a>
+    </td>
   </tr>
   <tr>
     <td><code>develop</code></td>

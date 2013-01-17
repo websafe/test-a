@@ -56,13 +56,13 @@ abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
     /**
      * Retrieve a filter instance.
      *
-     * @return unknown
+     * @return \Michelf\Markdown\Parser\CoreParser|\Michelf\Markdown\Parser\ExtraParser
      */
-    public function getFilterInstance ()
+    public function getParserInstance ()
     {
-        $filterClass = str_replace('Test', '', get_class($this));
+        $parserClass = str_replace('Test', '', get_class($this));
 
-        return new $filterClass();
+        return new $parserClass();
     }
 
     /* @formatter:off */
@@ -71,7 +71,7 @@ abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
      */
     public function testClassCanInstantiate ()
     {
-        $o = $this->getFilterInstance();
+        $o = $this->getParserInstance();
         $this->assertArrayHasKey(
             'transform',
             array_flip(get_class_methods($o))
@@ -82,7 +82,7 @@ abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
      */
     public function testCoreFeatures ()
     {
-        $o = $this->getFilterInstance();
+        $o = $this->getParserInstance();
         $this->assertArrayHasKey(
             'transform',
             array_flip(get_class_methods($o))
@@ -146,7 +146,7 @@ abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
                 $expectedHtml = file_get_contents(
                     __DIR__ . '/testdata/' . $dataSet . '/' . $testDataId .
                          '.html');
-                $parser = $this->getFilterInstance();
+                $parser = $this->getParserInstance();
                 $this->assertEquals($expectedHtml,
                     $parser->transform($markdown),
                     'Testdata: ' . $dataSet . '/' . $testDataId);

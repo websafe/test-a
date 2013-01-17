@@ -212,9 +212,9 @@ Milestones
 Class hierarchy diagram
 --------------------------------------------------------------------------------
 
-![(https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/classes.svg)]
+![Class hierarchy diagram](https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/classes.svg)
 
-[![(https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/classes.svg)]](https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/ "PHP documentation")
+[![Class hierarchy diagram](https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/classes.svg)](https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/ "PHP documentation")
 
 
 [Michel Fortin]: http://michelf.ca/

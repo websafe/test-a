@@ -221,7 +221,7 @@ Milestones
 
 
 
-
+--------------------------------------------------------------------------------
 [Michel Fortin]: http://michelf.ca/
 [PHP Markdown]: https://github.com/michelf/php-markdown/
 [branch: extra]: https://github.com/michelf/php-markdown/tree/extra
@@ -238,4 +238,4 @@ Milestones
 [PHPUnit]: https://github.com/sebastianbergmann/phpunit
 [Composer]: http://getcomposer.org/
 [PHP_CodeSniffer]: https://github.com/squizlabs/PHP_CodeSniffer
-[phpDocumentor]: http://www.phpdoc.org/
+[phpDocumentor2]: http://www.phpdoc.org/

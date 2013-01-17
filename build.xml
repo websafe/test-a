@@ -65,9 +65,10 @@ Author: Thomas Szteliga <ts@websafe.pl>, https://github.com/websafe/
 	<target name="update-vendors-dev" depends="update-composer">
 		<echo message="Updating vendors with dev..." />
 		<echo message="If something goes wrong check ${temp.dir}/composer.update.log and ${temp.dir}/composer.update.error" />
-		<exec executable="${vendor.dir}/bin/composer.phar" output="${temp.dir}/composer.update.log" error="${temp.dir}/composer.update.error" failonerror="true">
+		<exec executable="${vendor.dir}/bin/composer.phar" failonerror="true">
 			<arg value="-v" />
 			<arg value="update" />
+			<arg value="--prefer-source" />
 			<arg value="--dev" />
 		</exec>
 	</target>

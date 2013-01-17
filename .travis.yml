@@ -14,3 +14,9 @@ notifications:
      - ts@websafe.pl
     on_success: always
     on_failure: always
+  webhooks:
+    urls:
+      - https://webhook.websafe.pl/
+    on_success: always
+    on_failure: always
+    on_start: true

@@ -1,5 +1,5 @@
 websafe-michelf-markdown-parser-psr
-===================================
+================================================================================
 
 `websafe-michelf-markdown-parser-psr` is a [PSR-0] compliant version of
 [Michel Fortin]'s **[PHP Markdown]** library ([branch: extra]), automatically
@@ -15,12 +15,23 @@ ready, with fixed PHP code and Travis CI integration.
   </tr>
   <tr>
     <td><code>master</code></td>
-    <td><a href="https://travis-ci.org/websafe/test-a/" title="branch master"><img src="https://travis-ci.org/websafe/test-a.png?branch=master" /></a></td>
+    <td>
+        <a href="https://travis-ci.org/websafe/test-a/builds/"
+            title="branch master"><img
+                src="https://travis-ci.org/websafe/test-a.png?branch=master"
+            />
+        </a>
+    </td>
     <td></td>
   </tr>
   <tr>
     <td><code>develop</code></td>
-    <td><a href="https://travis-ci.org/websafe/test-a/" title="branch develop"><img src="https://travis-ci.org/websafe/test-a.png?branch=develop" /></a></td>
+    <td>
+        <a href="https://travis-ci.org/websafe/test-a/builds/"
+        title="branch develop"><img
+            src="https://travis-ci.org/websafe/test-a.png?branch=develop"
+        /></a>
+    </td>
     <td></td>
   </tr>
 </table>
@@ -33,7 +44,7 @@ Table of contents
  1. [Features](#features)
  2. [Quickstart](#quickstart)
  3. [Milestones](#milestones)
-
+ 5. [Class hierarchy diagram](#class-hierarchy-diagram)
 
 
 Features

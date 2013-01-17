@@ -23,7 +23,7 @@ ready, with fixed PHP code and Travis CI integration.
         </a>
     </td>
     <td>
-        <a href="https://github.com/michelf/php-markdown/commit/${{COMMIT}}">${{COMMIT}}</a>
+        <a href="https://github.com/michelf/php-markdown/commit/f5c689253dedcba2c145d67cefeb039483b9d62e">f5c689253dedcba2c145d67cefeb039483b9d62e</a>
     </td>
   </tr>
   <tr>
@@ -45,8 +45,9 @@ Table of contents
 
  1. [Features](#features)
  2. [Quickstart](#quickstart)
- 3. [Milestones](#milestones)
- 5. [Class hierarchy diagram](#class-hierarchy-diagram)
+ 5. [Class and namespace hierarchy diagram](#class-and-namespace-hierarchy-diagram)
+ 6. [Milestones](#milestones)
+
 
 
 Features
@@ -186,6 +187,16 @@ this will update [Composer] with all dependencies and recreate missing dirs.
 
 
 
+Class and namespace hierarchy diagram
+--------------------------------------------------------------------------------
+
+This diagram was generated using [phpDocumentor2]. You can browse the full
+PHP documentation for this library https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/
+
+[![Class hierarchy diagram](https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/classes.svg)](https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/ "PHP documentation")
+
+
+
 Milestones
 --------------------------------------------------------------------------------
 
@@ -193,7 +204,7 @@ Milestones
 
  + [PSR-0] autoloader interoperability.
  + [Composer] ready.
- + PhpDocumentor
+ + [phpDocumentor2].
  + Handy [Ant] `build.xml`.
  + Easy extendable [PHPUnit] test suite.
  + [Continuous integration] with [Travis CI].
@@ -208,11 +219,6 @@ Milestones
 
  + PSR-2
 
-
-Class hierarchy diagram
---------------------------------------------------------------------------------
-
-[![Class hierarchy diagram](https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/classes.svg)](https://docs.websafe.pl/websafe-michelf-markdown-parser-psr/phpdoc/ "PHP documentation")
 
 
 
@@ -232,4 +238,4 @@ Class hierarchy diagram
 [PHPUnit]: https://github.com/sebastianbergmann/phpunit
 [Composer]: http://getcomposer.org/
 [PHP_CodeSniffer]: https://github.com/squizlabs/PHP_CodeSniffer
-
+[phpDocumentor]: http://www.phpdoc.org/

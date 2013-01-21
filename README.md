@@ -224,7 +224,7 @@ Milestones
 --------------------------------------------------------------------------------
 [Michel Fortin]: http://michelf.ca/
 [PHP Markdown]: https://github.com/michelf/php-markdown/
-[branch: extra]: https://github.com/michelf/php-markdown/tree/extra
+[branch: lib]: https://github.com/michelf/php-markdown/tree/lib
 [PSR-0]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md

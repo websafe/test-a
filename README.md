@@ -200,7 +200,8 @@ PHP documentation for this library https://docs.websafe.pl/websafe-michelf-markd
 Milestones
 --------------------------------------------------------------------------------
 
-### 0.0.1
+
+### 0.0.0
 
  + [PSR-0] autoloader interoperability.
  + [Composer] ready.
@@ -208,6 +209,10 @@ Milestones
  + Handy [Ant] `build.xml`.
  + Easy extendable [PHPUnit] test suite.
  + [Continuous integration] with [Travis CI].
+
+
+### 0.0.1
+ + x
 
 
 ### 0.1.0

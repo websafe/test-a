@@ -9,10 +9,11 @@
  */
 namespace Michelf\Markdown\Parser;
 
+use Michelf\Markdown\Parser\ParserInterface;
 use Michelf\Markdown\Parser\CoreParser;
 
 /**
- * This class was extracted from the `markdown.php` file by a build-script,
+ * This class was extracted from Michel Fortins PHP Markdown by a build-script,
  * DO NOT EDIT HERE!
  *
  * What was modified?
@@ -36,35 +37,26 @@ use Michelf\Markdown\Parser\CoreParser;
  * @link http://php.net/manual/en/language.references.pass.php} otherwise
  *		PHP 5.4 wil raise a fatal error.
  */
-class ExtraParser extends CoreParser
+class ExtraParser extends CoreParser implements ParserInterface
 {
-    const EMPTY_ELEMENT_SUFFIX = " />";
-    const TAB_WIDTH = 4;
-    const FN_LINK_TITLE = "";
-    const FN_BACKLINK_TITLE = "";
-    const FN_LINK_CLASS = "";
-    const FN_BACKLINK_CLASS = "";
-    const CODE_CLASS_PREFIX = "";
-    const CODE_ATTR_ON_PRE = false;
-
     ### Configuration Variables ###
 
     # Prefix for footnote ids.
     public $fn_id_prefix = "";
 
     # Optional title attribute for footnote links and backlinks.
-    public $fn_link_title = self::FN_LINK_TITLE;
-    public $fn_backlink_title = self::FN_BACKLINK_TITLE;
+    public $fn_link_title = "";
+    public $fn_backlink_title = "";
 
     # Optional class attribute for footnote links and backlinks.
-    public $fn_link_class = self::FN_LINK_CLASS;
-    public $fn_backlink_class = self::FN_BACKLINK_CLASS;
+    public $fn_link_class = "";
+    public $fn_backlink_class = "";
 
     # Optional class prefix for fenced code block.
-    public $code_class_prefix = self::CODE_CLASS_PREFIX;
+    public $code_class_prefix = "";
     # Class attribute for code blocks goes on the `code` tag;
     # setting this to true will put attributes on the `pre` tag instead.
-    public $code_attr_on_pre = self::CODE_ATTR_ON_PRE;
+    public $code_attr_on_pre = false;
 
     # Predefined abbreviations.
     public $predef_abbr = array();
@@ -168,7 +160,7 @@ class ExtraParser extends CoreParser
         if (empty($attr)) return "";
 
         # Split on components
-        preg_match_all("/[.#][-_:a-zA-Z0-9]+/", $attr, $matches);
+        preg_match_all('/[#.][-_:a-zA-Z0-9]+/', $attr, $matches);
         $elements = $matches[0];
 
         # handle classes and ids (only first id taken into account)
@@ -320,7 +312,7 @@ class ExtraParser extends CoreParser
                     [ ]{0,'.($indent+3).'}~{3,}
                                     [ ]*
                     (?:
-                        [.]?[-_:a-zA-Z0-9]+ # standalone class name
+                    \.?[-_:a-zA-Z0-9]+ # standalone class name
                     |
                         '.$this->id_class_attr_nocatch_re.' # extra attributes
                     )?
@@ -925,7 +917,7 @@ class ExtraParser extends CoreParser
             (?>\A\n?|\n\n+)					# leading line
             (								# definition terms = $1
                 [ ]{0,'.$less_than_tab.'}	# leading whitespace
-                (?![:][ ]|[ ])				# negative lookahead for a definition
+                (?!\:[ ]|[ ])				# negative lookahead for a definition
                                             #   mark (colon) or more whitespace.
                 (?> \S.* \n)+?				# actual term (not whitespace).
             )
@@ -939,12 +931,12 @@ class ExtraParser extends CoreParser
             \n(\n+)?						# leading line = $1
             (								# marker space = $2
                 [ ]{0,'.$less_than_tab.'}	# whitespace before colon
-                [:][ ]+						# definition mark (colon)
+                \:[ ]+						# definition mark (colon)
             )
             ((?s:.+?))						# definition text = $3
             (?= \n+ 						# stop at next definition mark,
                 (?:							# next term or end of text
-                    [ ]{0,'.$less_than_tab.'} [:][ ]	|
+                    [ ]{0,'.$less_than_tab.'} \:[ ]	|
                     <dt> | \z
                 )
             )
@@ -1002,7 +994,7 @@ class ExtraParser extends CoreParser
                 )
                 [ ]*
                 (?:
-                    [.]?([-_:a-zA-Z0-9]+) # 2: standalone class name
+                    \.?([-_:a-zA-Z0-9]+) # 2: standalone class name
                 |
                     '.$this->id_class_attr_catch_re.' # 3: Extra attributes
                 )?

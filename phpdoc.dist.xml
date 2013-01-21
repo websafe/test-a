@@ -16,7 +16,7 @@
         <visibility>public,protected,private,inherited</visibility>
     </parser>
     <transformer>
-        <target>doc</target>
+        <target>doc/phpdoc</target>
     </transformer>
     <transformations>
         <template name="responsive" />

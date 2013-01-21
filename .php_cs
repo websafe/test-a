@@ -1,6 +1,7 @@
 <?php
 /**
- * @package
+ * This is a configuration file for PHP-CS-Fixer.
+ * @package Michelf_Markdown_Parser
  */
 //
 use Symfony\CS\FixerInterface;

@@ -9,11 +9,10 @@
  */
 namespace Michelf\Markdown\Parser;
 
-use Michelf\Markdown\Parser\ParserInterface;
 use Michelf\Markdown\Parser\CoreParser;
 
 /**
- * This class was extracted from Michel Fortins PHP Markdown by a build-script,
+ * This class was extracted from the `markdown.php` file by a build-script,
  * DO NOT EDIT HERE!
  *
  * What was modified?
@@ -37,26 +36,27 @@ use Michelf\Markdown\Parser\CoreParser;
  * @link http://php.net/manual/en/language.references.pass.php} otherwise
  *		PHP 5.4 wil raise a fatal error.
  */
-class ExtraParser extends CoreParser implements ParserInterface
+class ExtraParser extends CoreParser
 {
+    const EMPTY_ELEMENT_SUFFIX = " />";
+    const TAB_WIDTH = 4;
+    const FN_LINK_TITLE = "";
+    const FN_BACKLINK_TITLE = "";
+    const FN_LINK_CLASS = "";
+    const FN_BACKLINK_CLASS = "";
+
     ### Configuration Variables ###
 
     # Prefix for footnote ids.
     public $fn_id_prefix = "";
 
     # Optional title attribute for footnote links and backlinks.
-    public $fn_link_title = "";
-    public $fn_backlink_title = "";
+    public $fn_link_title = self::FN_LINK_TITLE;
+    public $fn_backlink_title = self::FN_BACKLINK_TITLE;
 
     # Optional class attribute for footnote links and backlinks.
-    public $fn_link_class = "";
-    public $fn_backlink_class = "";
-
-    # Optional class prefix for fenced code block.
-    public $code_class_prefix = "";
-    # Class attribute for code blocks goes on the `code` tag;
-    # setting this to true will put attributes on the `pre` tag instead.
-    public $code_attr_on_pre = false;
+    public $fn_link_class = self::FN_LINK_CLASS;
+    public $fn_backlink_class = self::FN_BACKLINK_CLASS;
 
     # Predefined abbreviations.
     public $predef_abbr = array();
@@ -146,8 +146,6 @@ class ExtraParser extends CoreParser implements ParserInterface
 
     # Expression to use to catch attributes (includes the braces)
     public $id_class_attr_catch_re = '\{((?:[ ]*[#.][-_:a-zA-Z0-9]+){1,})[ ]*\}';
-    # Expression to use when parsing in a context when no capture is desired
-    public $id_class_attr_nocatch_re = '\{(?:[ ]*[#.][-_:a-zA-Z0-9]+){1,}[ ]*\}';
 
     public function doExtraAttributes($tag_name, $attr)
     {
@@ -308,16 +306,8 @@ class ExtraParser extends CoreParser implements ParserInterface
                     )*
                 |
                     # Fenced code block marker
-                    (?<= ^ | \n )
-                    [ ]{0,'.($indent+3).'}~{3,}
-                                    [ ]*
-                    (?:
-                        [.]?[-_:a-zA-Z0-9]+ # standalone class name
-                    |
-                        '.$this->id_class_attr_nocatch_re.' # extra attributes
-                    )?
-                    [ ]*
-                    \n
+                    (?> ^ | \n )
+                    [ ]{0,'.($indent).'}~~~+[ ]*\n
                 ' : '' ). ' # End (if not is span).
                 )
             }xs';
@@ -380,11 +370,10 @@ class ExtraParser extends CoreParser implements ParserInterface
             #
             # Check for: Fenced code block marker.
             #
-            else if (preg_match('{^\n?([ ]{0,'.($indent+3).'})(~+)}', $tag, $capture)) {
+            else if (preg_match('{^\n?[ ]{0,'.($indent+3).'}~}', $tag)) {
                 # Fenced code block marker: find matching end marker.
-                $fence_indent = strlen($capture[1]); # use captured indent in re
-                $fence_re = $capture[2]; # use captured fence in re
-                if (preg_match('{^(?>.*\n)*?[ ]{'.($fence_indent).'}'.$fence_re.'[ ]*(?:\n|$)}', $text,
+                $tag_re = preg_quote(trim($tag));
+                if (preg_match('{^(?>.*\n)+?[ ]{0,'.($indent).'}'.$tag_re.'[ ]*\n}', $text,
                     $matches))
                 {
                     # End marker found: pass text unchanged until marker.
@@ -992,15 +981,9 @@ class ExtraParser extends CoreParser implements ParserInterface
                 (
                     ~{3,} # Marker: three tilde or more.
                 )
-                [ ]*
-                (?:
-                    [.]?([-_:a-zA-Z0-9]+) # 2: standalone class name
-                |
-                    '.$this->id_class_attr_catch_re.' # 3: Extra attributes
-                )?
                 [ ]* \n # Whitespace and newline following marker.
 
-                # 4: Content
+                # 2: Content
                 (
                     (?>
                         (?!\1 [ ]* \n)	# Not a closing marker.
@@ -1017,23 +1000,11 @@ class ExtraParser extends CoreParser implements ParserInterface
     }
     public function _doFencedCodeBlocks_callback($matches)
     {
-        $classname =& $matches[2];
-        $attrs     =& $matches[3];
-        $codeblock = $matches[4];
+        $codeblock = $matches[2];
         $codeblock = htmlspecialchars($codeblock, ENT_NOQUOTES);
         $codeblock = preg_replace_callback('/^\n+/',
             array(&$this, '_doFencedCodeBlocks_newlines'), $codeblock);
-
-        if ($classname != "") {
-            if ($classname{0} == '.')
-                $classname = substr($classname, 1);
-            $attr_str = ' class="'.$this->code_class_prefix.$classname.'"';
-        } else {
-            $attr_str = $this->doExtraAttributes($this->code_attr_on_pre ? "pre" : "code", $attrs);
-        }
-        $pre_attr_str  = $this->code_attr_on_pre ? $attr_str : '';
-        $code_attr_str = $this->code_attr_on_pre ? '' : $attr_str;
-        $codeblock  = "<pre$pre_attr_str><code$code_attr_str>$codeblock</code></pre>";
+        $codeblock = "<pre><code>$codeblock</code></pre>";
 
         return "\n\n".$this->hashBlock($codeblock)."\n\n";
     }

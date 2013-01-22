@@ -44,8 +44,6 @@ class ExtraParser extends CoreParser
     const FN_BACKLINK_TITLE = "";
     const FN_LINK_CLASS = "";
     const FN_BACKLINK_CLASS = "";
-    const CODE_CLASS_PREFIX = "";
-    const ATTR_ON_PRE = false;
 
     ### Configuration Variables ###
 
@@ -142,50 +140,6 @@ class ExtraParser extends CoreParser
         $this->abbr_word_re = '';
 
         parent::teardown();
-    }
-
-    ### Extra Attribute Parser ###
-
-    # Expression to use to catch attributes (includes the braces)
-    public $id_class_attr_catch_re = '\{((?:[ ]*[#.][-_:a-zA-Z0-9]+){1,})[ ]*\}';
-    # Expression to use when parsing in a context when no capture is desired
-    public $id_class_attr_nocatch_re = '\{(?:[ ]*[#.][-_:a-zA-Z0-9]+){1,}[ ]*\}';
-
-    public function doExtraAttributes($tag_name, $attr)
-    {
-    #
-    # Parse attributes caught by the $this->id_class_attr_catch_re expression
-    # and return the HTML-formatted list of attributes.
-    #
-    # Currently supported attributes are .class and #id.
-    #
-        if (empty($attr)) return "";
-
-        # Split on components
-        preg_match_all("/[.#][-_:a-zA-Z0-9]+/", $attr, $matches);
-        $elements = $matches[0];
-
-        # handle classes and ids (only first id taken into account)
-        $classes = array();
-        $id = false;
-        foreach ($elements as $element) {
-            if ($element{0} == '.') {
-                $classes[] = substr($element, 1);
-            } elseif ($element{0} == '#') {
-                if ($id === false) $id = substr($element, 1);
-            }
-        }
-
-        # compose attributes as string
-        $attr_str = "";
-        if (!empty($id)) {
-            $attr_str .= ' id="'.$id.'"';
-        }
-        if (!empty($classes)) {
-            $attr_str .= ' class="'.implode(" ", $classes).'"';
-        }
-
-        return $attr_str;
     }
 
     ### HTML Block Parser ###
@@ -311,15 +265,7 @@ class ExtraParser extends CoreParser
                 |
                     # Fenced code block marker
                     (?> ^ | \n )
-                    [ ]{0,'.($indent).'}~~~+[ ]*
-                                    [ ]*
-                    (?:
-                        [.][-_:a-zA-Z0-9]+ # standalone class name
-                    |
-                        '.$this->id_class_attr_nocatch_re.' # extra attributes
-                    )?
-                    [ ]*
-                    \n
+                    [ ]{0,'.($indent).'}~~~+[ ]*\n
                 ' : '' ). ' # End (if not is span).
                 )
             }xs';
@@ -668,7 +614,7 @@ class ExtraParser extends CoreParser
         $text = preg_replace_callback(
             '{
                 (^.+?)								# $1: Header text
-                (?:[ ]+ '.$this->id_class_attr_catch_re.' )?	 # $3 = id/class attributes
+                (?:[ ]+ \{((?:[ ]*[#.][-_:a-zA-Z0-9]+){1,})[ ]*\} )?	 # $3 = id/class attributes
                 [ ]*\n(=+|-+)[ ]*\n+				# $3: Header footer
             }mx',
             array(&$this, '_doHeaders_callback_setext'), $text);
@@ -686,7 +632,7 @@ class ExtraParser extends CoreParser
                 (.+?)		# $2 = Header text
                 [ ]*
                 \#*			# optional closing #\'s (not counted)
-                (?:[ ]+ '.$this->id_class_attr_catch_re.' )?	 # $3 = id/class attributes
+                (?:[ ]+ \{((?:[ ]*[#.][-_:a-zA-Z0-9]+){1,})[ ]*\} )?	 # $3 = id/class attributes
                 [ ]*
                 \n+
             }xm',
@@ -694,13 +640,43 @@ class ExtraParser extends CoreParser
 
         return $text;
     }
+    public function _doHeaders_attr($attr)
+    {
+        if (empty($attr)) return "";
+
+        # Split on components
+        preg_match_all("/[.#][-_:a-zA-Z0-9]+/", $attr, $matches);
+        $elements = $matches[0];
+
+        # handle classes and ids (only first id taken into account
+        $classes = array();
+        $id = FALSE;
+        foreach ($elements as $element) {
+            if ($element{0} == '.') {
+                $classes[] = substr($element, 1);
+            } elseif ($element{0} == '#') {
+                if ($id === FALSE) $id = substr($element, 1);
+            }
+        }
+
+        # compose attributes as string
+        $attr_str = "";
+        if (!empty($id)) {
+            $attr_str .= ' id="'.$id.'"';
+        }
+        if (!empty($classes)) {
+            $attr_str .= ' class="'.implode(" ", $classes).'"';
+        }
+
+        return $attr_str;
+    }
     public function _doHeaders_callback_setext($matches)
     {
         if ($matches[3] == '-' && preg_match('{^- }', $matches[1]))
 
             return $matches[0];
         $level = $matches[3]{0} == '=' ? 1 : 2;
-        $attr  = $this->doExtraAttributes("h$level", $dummy =& $matches[2]);
+        $attr  = $this->_doHeaders_attr($dummy =& $matches[2]);
         $block = "<h$level$attr>".$this->runSpanGamut($matches[1])."</h$level>";
 
         return "\n" . $this->hashBlock($block) . "\n\n";
@@ -708,7 +684,7 @@ class ExtraParser extends CoreParser
     public function _doHeaders_callback_atx($matches)
     {
         $level = strlen($matches[1]);
-        $attr  = $this->doExtraAttributes("h$level", $dummy =& $matches[3]);
+        $attr  = $this->_doHeaders_attr($dummy =& $matches[3]);
         $block = "<h$level$attr>".$this->runSpanGamut($matches[2])."</h$level>";
 
         return "\n" . $this->hashBlock($block) . "\n\n";
@@ -993,15 +969,9 @@ class ExtraParser extends CoreParser
                 (
                     ~{3,} # Marker: three tilde or more.
                 )
-                [ ]*
-                (?:
-                    [.]?([-_:a-zA-Z0-9]+) # 2: standalone class name
-                |
-                    '.$this->id_class_attr_catch_re.' # 3: Extra attributes
-                )?
                 [ ]* \n # Whitespace and newline following marker.
 
-                # 4: Content
+                # 2: Content
                 (
                     (?>
                         (?!\1 [ ]* \n)	# Not a closing marker.
@@ -1018,23 +988,11 @@ class ExtraParser extends CoreParser
     }
     public function _doFencedCodeBlocks_callback($matches)
     {
-        $classname =& $matches[2];
-        $attrs     =& $matches[3];
-        $codeblock = $matches[4];
+        $codeblock = $matches[2];
         $codeblock = htmlspecialchars($codeblock, ENT_NOQUOTES);
         $codeblock = preg_replace_callback('/^\n+/',
             array(&$this, '_doFencedCodeBlocks_newlines'), $codeblock);
-
-        if ($classname != "") {
-            if ($classname{0} == '.')
-                $classname = substr($classname, 1);
-            $attr_str = ' class="'.self::CODE_CLASS_PREFIX.$classname.'"';
-        } else {
-            $attr_str = $this->doExtraAttributes(self::ATTR_ON_PRE ? "pre" : "code", $attrs);
-        }
-        $pre_attr_str  = self::ATTR_ON_PRE ? $attr_str : '';
-        $code_attr_str = self::ATTR_ON_PRE ? '' : $attr_str;
-        $codeblock  = "<pre$pre_attr_str><code$code_attr_str>$codeblock</code></pre>";
+        $codeblock = "<pre><code>$codeblock</code></pre>";
 
         return "\n\n".$this->hashBlock($codeblock)."\n\n";
     }

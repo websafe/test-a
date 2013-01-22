@@ -42,8 +42,6 @@ class CoreParser
     const FN_BACKLINK_TITLE = "";
     const FN_LINK_CLASS = "";
     const FN_BACKLINK_CLASS = "";
-    const CODE_CLASS_PREFIX = "";
-    const ATTR_ON_PRE = false;
 
     ### Configuration Variables ###
 

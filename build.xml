@@ -90,7 +90,7 @@ Author: Thomas Szteliga <ts@websafe.pl>, https://github.com/websafe/
         <exec executable="${vendor.dir}/bin/phpunit" failonerror="true">
             <arg value="-v" />
             <arg value="--debug" />
-            <arg value="${tests.dir}" />
+            <!-- <arg value="${tests.dir}" /> -->
         </exec>
     </target>
 

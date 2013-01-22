@@ -44,6 +44,8 @@ class ExtraParser extends CoreParser
     const FN_BACKLINK_TITLE = "";
     const FN_LINK_CLASS = "";
     const FN_BACKLINK_CLASS = "";
+    const CODE_CLASS_PREFIX = "";
+    const CODE_ATTR_ON_PRE = false;
 
     ### Configuration Variables ###
 
@@ -57,6 +59,12 @@ class ExtraParser extends CoreParser
     # Optional class attribute for footnote links and backlinks.
     public $fn_link_class = self::FN_LINK_CLASS;
     public $fn_backlink_class = self::FN_BACKLINK_CLASS;
+
+    # Optional class prefix for fenced code block.
+    public $code_class_prefix = self::CODE_CLASS_PREFIX;
+    # Class attribute for code blocks goes on the `code` tag;
+    # setting this to true will put attributes on the `pre` tag instead.
+    public $code_attr_on_pre = self::CODE_ATTR_ON_PRE;
 
     # Predefined abbreviations.
     public $predef_abbr = array();
@@ -96,6 +104,8 @@ class ExtraParser extends CoreParser
     # Extra variables used during extra transformations.
     public $footnotes = array();
     public $footnotes_ordered = array();
+    public $footnotes_ref_count = array();
+    public $footnotes_numbers = array();
     public $abbr_desciptions = array();
     public $abbr_word_re = '';
 
@@ -111,6 +121,8 @@ class ExtraParser extends CoreParser
 
         $this->footnotes = array();
         $this->footnotes_ordered = array();
+        $this->footnotes_ref_count = array();
+        $this->footnotes_numbers = array();
         $this->abbr_desciptions = array();
         $this->abbr_word_re = '';
         $this->footnote_counter = 1;
@@ -130,10 +142,56 @@ class ExtraParser extends CoreParser
     #
         $this->footnotes = array();
         $this->footnotes_ordered = array();
+        $this->footnotes_ref_count = array();
+        $this->footnotes_numbers = array();
         $this->abbr_desciptions = array();
         $this->abbr_word_re = '';
 
         parent::teardown();
+    }
+
+    ### Extra Attribute Parser ###
+
+    # Expression to use to catch attributes (includes the braces)
+    public $id_class_attr_catch_re = '\{((?:[ ]*[#.][-_:a-zA-Z0-9]+){1,})[ ]*\}';
+    # Expression to use when parsing in a context when no capture is desired
+    public $id_class_attr_nocatch_re = '\{(?:[ ]*[#.][-_:a-zA-Z0-9]+){1,}[ ]*\}';
+
+    public function doExtraAttributes($tag_name, $attr)
+    {
+    #
+    # Parse attributes caught by the $this->id_class_attr_catch_re expression
+    # and return the HTML-formatted list of attributes.
+    #
+    # Currently supported attributes are .class and #id.
+    #
+        if (empty($attr)) return "";
+
+        # Split on components
+        preg_match_all("/[.#][-_:a-zA-Z0-9]+/", $attr, $matches);
+        $elements = $matches[0];
+
+        # handle classes and ids (only first id taken into account)
+        $classes = array();
+        $id = false;
+        foreach ($elements as $element) {
+            if ($element{0} == '.') {
+                $classes[] = substr($element, 1);
+            } elseif ($element{0} == '#') {
+                if ($id === false) $id = substr($element, 1);
+            }
+        }
+
+        # compose attributes as string
+        $attr_str = "";
+        if (!empty($id)) {
+            $attr_str .= ' id="'.$id.'"';
+        }
+        if (!empty($classes)) {
+            $attr_str .= ' class="'.implode(" ", $classes).'"';
+        }
+
+        return $attr_str;
     }
 
     ### HTML Block Parser ###
@@ -167,10 +225,12 @@ class ExtraParser extends CoreParser
     #
     # This works by calling _HashHTMLBlocks_InMarkdown, which then calls
     # _HashHTMLBlocks_InHTML when it encounter block tags. When the markdown="1"
-    # attribute is found whitin a tag, _HashHTMLBlocks_InHTML calls back
+    # attribute is found within a tag, _HashHTMLBlocks_InHTML calls back
     #  _HashHTMLBlocks_InMarkdown to handle the Markdown syntax within the tag.
     # These two functions are calling each other. It's recursive!
     #
+        if ($this->no_markup)  return $text;
+
         #
         # Call the HTML-in-Markdown hasher.
         #
@@ -257,7 +317,15 @@ class ExtraParser extends CoreParser
                 |
                     # Fenced code block marker
                     (?> ^ | \n )
-                    [ ]{0,'.($indent).'}~~~+[ ]*\n
+                    [ ]{0,'.($indent+3).'}~{3,}
+                                    [ ]*
+                    (?:
+                        [.]?[-_:a-zA-Z0-9]+ # standalone class name
+                    |
+                        '.$this->id_class_attr_nocatch_re.' # extra attributes
+                    )?
+                    [ ]*
+                    \n
                 ' : '' ). ' # End (if not is span).
                 )
             }xs';
@@ -594,19 +662,19 @@ class ExtraParser extends CoreParser
     public function doHeaders($text)
     {
     #
-    # Redefined to add id attribute support.
+    # Redefined to add id and class attribute support.
     #
         # Setext-style headers:
         #	  Header 1  {#header1}
         #	  ========
         #
-        #	  Header 2  {#header2}
+        #	  Header 2  {#header2 .class1 .class2}
         #	  --------
         #
         $text = preg_replace_callback(
             '{
                 (^.+?)								# $1: Header text
-                (?:[ ]+\{\#([-_:a-zA-Z0-9]+)\})?	# $2: Id attribute
+                (?:[ ]+ '.$this->id_class_attr_catch_re.' )?	 # $3 = id/class attributes
                 [ ]*\n(=+|-+)[ ]*\n+				# $3: Header footer
             }mx',
             array(&$this, '_doHeaders_callback_setext'), $text);
@@ -614,9 +682,9 @@ class ExtraParser extends CoreParser
         # atx-style headers:
         #	# Header 1        {#header1}
         #	## Header 2       {#header2}
-        #	## Header 2 with closing hashes ##  {#header3}
+        #	## Header 2 with closing hashes ##  {#header3.class1.class2}
         #	...
-        #	###### Header 6   {#header2}
+        #	###### Header 6   {.class2}
         #
         $text = preg_replace_callback('{
                 ^(\#{1,6})	# $1 = string of #\'s
@@ -624,7 +692,7 @@ class ExtraParser extends CoreParser
                 (.+?)		# $2 = Header text
                 [ ]*
                 \#*			# optional closing #\'s (not counted)
-                (?:[ ]+\{\#([-_:a-zA-Z0-9]+)\})? # id attribute
+                (?:[ ]+ '.$this->id_class_attr_catch_re.' )?	 # $3 = id/class attributes
                 [ ]*
                 \n+
             }xm',
@@ -632,18 +700,13 @@ class ExtraParser extends CoreParser
 
         return $text;
     }
-    public function _doHeaders_attr($attr)
-    {
-        if (empty($attr))  return "";
-        return " id=\"$attr\"";
-    }
     public function _doHeaders_callback_setext($matches)
     {
         if ($matches[3] == '-' && preg_match('{^- }', $matches[1]))
 
             return $matches[0];
         $level = $matches[3]{0} == '=' ? 1 : 2;
-        $attr  = $this->_doHeaders_attr($id =& $matches[2]);
+        $attr  = $this->doExtraAttributes("h$level", $dummy =& $matches[2]);
         $block = "<h$level$attr>".$this->runSpanGamut($matches[1])."</h$level>";
 
         return "\n" . $this->hashBlock($block) . "\n\n";
@@ -651,7 +714,7 @@ class ExtraParser extends CoreParser
     public function _doHeaders_callback_atx($matches)
     {
         $level = strlen($matches[1]);
-        $attr  = $this->_doHeaders_attr($id =& $matches[3]);
+        $attr  = $this->doExtraAttributes("h$level", $dummy =& $matches[3]);
         $block = "<h$level$attr>".$this->runSpanGamut($matches[2])."</h$level>";
 
         return "\n" . $this->hashBlock($block) . "\n\n";
@@ -936,9 +999,15 @@ class ExtraParser extends CoreParser
                 (
                     ~{3,} # Marker: three tilde or more.
                 )
+                [ ]*
+                (?:
+                    [.]?([-_:a-zA-Z0-9]+) # 2: standalone class name
+                |
+                    '.$this->id_class_attr_catch_re.' # 3: Extra attributes
+                )?
                 [ ]* \n # Whitespace and newline following marker.
 
-                # 2: Content
+                # 4: Content
                 (
                     (?>
                         (?!\1 [ ]* \n)	# Not a closing marker.
@@ -955,11 +1024,23 @@ class ExtraParser extends CoreParser
     }
     public function _doFencedCodeBlocks_callback($matches)
     {
-        $codeblock = $matches[2];
+        $classname =& $matches[2];
+        $attrs     =& $matches[3];
+        $codeblock = $matches[4];
         $codeblock = htmlspecialchars($codeblock, ENT_NOQUOTES);
         $codeblock = preg_replace_callback('/^\n+/',
             array(&$this, '_doFencedCodeBlocks_newlines'), $codeblock);
-        $codeblock = "<pre><code>$codeblock</code></pre>";
+
+        if ($classname != "") {
+            if ($classname{0} == '.')
+                $classname = substr($classname, 1);
+            $attr_str = ' class="'.$this->code_class_prefix.$classname.'"';
+        } else {
+            $attr_str = $this->doExtraAttributes($this->code_attr_on_pre ? "pre" : "code", $attrs);
+        }
+        $pre_attr_str  = $this->code_attr_on_pre ? $attr_str : '';
+        $code_attr_str = $this->code_attr_on_pre ? '' : $attr_str;
+        $codeblock  = "<pre$pre_attr_str><code$code_attr_str>$codeblock</code></pre>";
 
         return "\n\n".$this->hashBlock($codeblock)."\n\n";
     }
@@ -1108,6 +1189,9 @@ class ExtraParser extends CoreParser
                 $footnote = reset($this->footnotes_ordered);
                 $note_id = key($this->footnotes_ordered);
                 unset($this->footnotes_ordered[$note_id]);
+                $ref_count = $this->footnotes_ref_count[$note_id];
+                unset($this->footnotes_ref_count[$note_id]);
+                unset($this->footnotes[$note_id]);
 
                 $footnote .= "\n"; # Need to append newline before parsing.
                 $footnote = $this->runBlockGamut("$footnote\n");
@@ -1117,8 +1201,12 @@ class ExtraParser extends CoreParser
                 $attr = str_replace("%%", ++$num, $attr);
                 $note_id = $this->encodeAttribute($note_id);
 
-                # Add backlink to last paragraph; create new paragraph if needed.
+                # Prepare backlink, multiple backlinks if multiple references
                 $backlink = "<a href=\"#fnref:$note_id\"$attr>&#8617;</a>";
+                for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
+                    $backlink .= " <a href=\"#fnref$ref_num:$note_id\"$attr>&#8617;</a>";
+                }
+                # Add backlink to last paragraph; create new paragraph if needed.
                 if (preg_match('{</p>$}', $footnote)) {
                     $footnote = substr($footnote, 0, -4) . "&#160;$backlink</p>";
                 } else {
@@ -1143,11 +1231,18 @@ class ExtraParser extends CoreParser
         # Create footnote marker only if it has a corresponding footnote *and*
         # the footnote hasn't been used by another marker.
         if (isset($this->footnotes[$node_id])) {
-            # Transfert footnote content to the ordered list.
-            $this->footnotes_ordered[$node_id] = $this->footnotes[$node_id];
-            unset($this->footnotes[$node_id]);
+            $num =& $this->footnotes_numbers[$node_id];
+            if (!isset($num)) {
+                # Transfer footnote content to the ordered list and give it its
+                # number
+                $this->footnotes_ordered[$node_id] = $this->footnotes[$node_id];
+                $this->footnotes_ref_count[$node_id] = 1;
+                $num = $this->footnote_counter++;
+                $ref_count_mark = '';
+            } else {
+                $ref_count_mark = $this->footnotes_ref_count[$node_id] += 1;
+            }
 
-            $num = $this->footnote_counter++;
             $attr = " rel=\"footnote\"";
             if ($this->fn_link_class != "") {
                 $class = $this->fn_link_class;
@@ -1164,7 +1259,7 @@ class ExtraParser extends CoreParser
             $node_id = $this->encodeAttribute($node_id);
 
             return
-                "<sup id=\"fnref:$node_id\">".
+                "<sup id=\"fnref$ref_count_mark:$node_id\">".
                 "<a href=\"#fn:$node_id\"$attr>$num</a>".
                 "</sup>";
         }

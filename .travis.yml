@@ -16,8 +16,8 @@ notifications:
     on_failure: always
   webhooks:
     urls:
-      - https://webhook.websafe.pl/
-      - http://webhook.websafe.pl/
+      - https://webhook.websafe.pl/notify
+      - http://webhook.websafe.pl/notify
     on_success: always
     on_failure: always
     on_start: true

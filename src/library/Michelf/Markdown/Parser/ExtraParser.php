@@ -96,8 +96,6 @@ class ExtraParser extends CoreParser
     # Extra variables used during extra transformations.
     public $footnotes = array();
     public $footnotes_ordered = array();
-    public $footnotes_ref_count = array();
-    public $footnotes_numbers = array();
     public $abbr_desciptions = array();
     public $abbr_word_re = '';
 
@@ -113,8 +111,6 @@ class ExtraParser extends CoreParser
 
         $this->footnotes = array();
         $this->footnotes_ordered = array();
-        $this->footnotes_ref_count = array();
-        $this->footnotes_numbers = array();
         $this->abbr_desciptions = array();
         $this->abbr_word_re = '';
         $this->footnote_counter = 1;
@@ -134,8 +130,6 @@ class ExtraParser extends CoreParser
     #
         $this->footnotes = array();
         $this->footnotes_ordered = array();
-        $this->footnotes_ref_count = array();
-        $this->footnotes_numbers = array();
         $this->abbr_desciptions = array();
         $this->abbr_word_re = '';
 
@@ -177,8 +171,6 @@ class ExtraParser extends CoreParser
     #  _HashHTMLBlocks_InMarkdown to handle the Markdown syntax within the tag.
     # These two functions are calling each other. It's recursive!
     #
-        if ($this->no_markup)  return $text;
-
         #
         # Call the HTML-in-Markdown hasher.
         #
@@ -1116,9 +1108,6 @@ class ExtraParser extends CoreParser
                 $footnote = reset($this->footnotes_ordered);
                 $note_id = key($this->footnotes_ordered);
                 unset($this->footnotes_ordered[$note_id]);
-                $ref_count = $this->footnotes_ref_count[$note_id];
-                unset($this->footnotes_ref_count[$note_id]);
-                unset($this->footnotes[$note_id]);
 
                 $footnote .= "\n"; # Need to append newline before parsing.
                 $footnote = $this->runBlockGamut("$footnote\n");
@@ -1128,12 +1117,8 @@ class ExtraParser extends CoreParser
                 $attr = str_replace("%%", ++$num, $attr);
                 $note_id = $this->encodeAttribute($note_id);
 
-                # Prepare backlink, multiple backlinks if multiple references
-                $backlink = "<a href=\"#fnref:$note_id\"$attr>&#8617;</a>";
-                for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
-                    $backlink .= " <a href=\"#fnref$ref_num:$note_id\"$attr>&#8617;</a>";
-                }
                 # Add backlink to last paragraph; create new paragraph if needed.
+                $backlink = "<a href=\"#fnref:$note_id\"$attr>&#8617;</a>";
                 if (preg_match('{</p>$}', $footnote)) {
                     $footnote = substr($footnote, 0, -4) . "&#160;$backlink</p>";
                 } else {
@@ -1158,18 +1143,11 @@ class ExtraParser extends CoreParser
         # Create footnote marker only if it has a corresponding footnote *and*
         # the footnote hasn't been used by another marker.
         if (isset($this->footnotes[$node_id])) {
-            $num =& $this->footnotes_numbers[$node_id];
-            if (!isset($num)) {
-                # Transfer footnote content to the ordered list and give it its
-                # number
-                $this->footnotes_ordered[$node_id] = $this->footnotes[$node_id];
-                $this->footnotes_ref_count[$node_id] = 1;
-                $num = $this->footnote_counter++;
-                $ref_count_mark = '';
-            } else {
-                $ref_count_mark = $this->footnotes_ref_count[$node_id] += 1;
-            }
+            # Transfert footnote content to the ordered list.
+            $this->footnotes_ordered[$node_id] = $this->footnotes[$node_id];
+            unset($this->footnotes[$node_id]);
 
+            $num = $this->footnote_counter++;
             $attr = " rel=\"footnote\"";
             if ($this->fn_link_class != "") {
                 $class = $this->fn_link_class;
@@ -1186,7 +1164,7 @@ class ExtraParser extends CoreParser
             $node_id = $this->encodeAttribute($node_id);
 
             return
-                "<sup id=\"fnref$ref_count_mark:$node_id\">".
+                "<sup id=\"fnref:$node_id\">".
                 "<a href=\"#fn:$node_id\"$attr>$num</a>".
                 "</sup>";
         }

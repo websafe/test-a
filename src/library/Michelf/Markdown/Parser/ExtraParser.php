@@ -9,10 +9,11 @@
  */
 namespace Michelf\Markdown\Parser;
 
+use Michelf\Markdown\Parser\ParserInterface;
 use Michelf\Markdown\Parser\CoreParser;
 
 /**
- * This class was extracted from the `markdown.php` file by a build-script,
+ * This class was extracted from Michel Fortins PHP Markdown by a build-script,
  * DO NOT EDIT HERE!
  *
  * What was modified?
@@ -36,35 +37,26 @@ use Michelf\Markdown\Parser\CoreParser;
  * @link http://php.net/manual/en/language.references.pass.php} otherwise
  *		PHP 5.4 wil raise a fatal error.
  */
-class ExtraParser extends CoreParser
+class ExtraParser extends CoreParser implements ParserInterface
 {
-    const EMPTY_ELEMENT_SUFFIX = " />";
-    const TAB_WIDTH = 4;
-    const FN_LINK_TITLE = "";
-    const FN_BACKLINK_TITLE = "";
-    const FN_LINK_CLASS = "";
-    const FN_BACKLINK_CLASS = "";
-    const CODE_CLASS_PREFIX = "";
-    const CODE_ATTR_ON_PRE = false;
-
     ### Configuration Variables ###
 
     # Prefix for footnote ids.
     public $fn_id_prefix = "";
 
     # Optional title attribute for footnote links and backlinks.
-    public $fn_link_title = self::FN_LINK_TITLE;
-    public $fn_backlink_title = self::FN_BACKLINK_TITLE;
+    public $fn_link_title = "";
+    public $fn_backlink_title = "";
 
     # Optional class attribute for footnote links and backlinks.
-    public $fn_link_class = self::FN_LINK_CLASS;
-    public $fn_backlink_class = self::FN_BACKLINK_CLASS;
+    public $fn_link_class = "";
+    public $fn_backlink_class = "";
 
     # Optional class prefix for fenced code block.
-    public $code_class_prefix = self::CODE_CLASS_PREFIX;
+    public $code_class_prefix = "";
     # Class attribute for code blocks goes on the `code` tag;
     # setting this to true will put attributes on the `pre` tag instead.
-    public $code_attr_on_pre = self::CODE_ATTR_ON_PRE;
+    public $code_attr_on_pre = false;
 
     # Predefined abbreviations.
     public $predef_abbr = array();

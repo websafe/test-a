@@ -96,6 +96,7 @@ class ExtraParser extends CoreParser
     # Extra variables used during extra transformations.
     public $footnotes = array();
     public $footnotes_ordered = array();
+    public $footnotes_numbers = array();
     public $abbr_desciptions = array();
     public $abbr_word_re = '';
 
@@ -111,6 +112,7 @@ class ExtraParser extends CoreParser
 
         $this->footnotes = array();
         $this->footnotes_ordered = array();
+        $this->footnotes_numbers = array();
         $this->abbr_desciptions = array();
         $this->abbr_word_re = '';
         $this->footnote_counter = 1;
@@ -130,6 +132,7 @@ class ExtraParser extends CoreParser
     #
         $this->footnotes = array();
         $this->footnotes_ordered = array();
+        $this->footnotes_numbers = array();
         $this->abbr_desciptions = array();
         $this->abbr_word_re = '';
 
@@ -167,10 +170,12 @@ class ExtraParser extends CoreParser
     #
     # This works by calling _HashHTMLBlocks_InMarkdown, which then calls
     # _HashHTMLBlocks_InHTML when it encounter block tags. When the markdown="1"
-    # attribute is found whitin a tag, _HashHTMLBlocks_InHTML calls back
+    # attribute is found within a tag, _HashHTMLBlocks_InHTML calls back
     #  _HashHTMLBlocks_InMarkdown to handle the Markdown syntax within the tag.
     # These two functions are calling each other. It's recursive!
     #
+        if ($this->no_markup)  return $text;
+
         #
         # Call the HTML-in-Markdown hasher.
         #
@@ -220,7 +225,7 @@ class ExtraParser extends CoreParser
         # Regex to match any tag.
         $block_tag_re =
             '{
-                (					# $2: Capture hole tag.
+                (					# $2: Capture whole tag.
                     </?					# Any opening or closing tag.
                         (?>				# Tag name.
                             '.$this->block_tags_re.'			|
@@ -436,7 +441,7 @@ class ExtraParser extends CoreParser
 
         # Regex to match any tag.
         $tag_re = '{
-                (					# $2: Capture hole tag.
+                (					# $2: Capture whole tag.
                     </?					# Any opening or closing tag.
                         [\w:$]+			# Tag name.
                         (?:
@@ -563,7 +568,7 @@ class ExtraParser extends CoreParser
                     if (!$span_mode)	$parsed .= "\n\n$block_text\n\n";
                     else				$parsed .= "$block_text";
 
-                    # Start over a new block.
+                    # Start over with a new block.
                     $block_text = "";
                 } else $block_text .= $tag;
             }
@@ -582,8 +587,8 @@ class ExtraParser extends CoreParser
     public function hashClean($text)
     {
     #
-    # Called whenever a tag must be hashed when a function insert a "clean" tag
-    # in $text, it pass through this function and is automaticaly escaped,
+    # Called whenever a tag must be hashed when a function inserts a "clean" tag
+    # in $text, it passes through this function and is automaticaly escaped,
     # blocking invalid nested overlap.
     #
 
@@ -1143,11 +1148,14 @@ class ExtraParser extends CoreParser
         # Create footnote marker only if it has a corresponding footnote *and*
         # the footnote hasn't been used by another marker.
         if (isset($this->footnotes[$node_id])) {
-            # Transfert footnote content to the ordered list.
-            $this->footnotes_ordered[$node_id] = $this->footnotes[$node_id];
-            unset($this->footnotes[$node_id]);
+            $num =& $this->footnotes_numbers[$node_id];
+            if (!isset($num)) {
+                # Transfer footnote content to the ordered list and give it its
+                # number
+                $this->footnotes_ordered[$node_id] = $this->footnotes[$node_id];
+                $num = $this->footnote_counter++;
+            }
 
-            $num = $this->footnote_counter++;
             $attr = " rel=\"footnote\"";
             if ($this->fn_link_class != "") {
                 $class = $this->fn_link_class;

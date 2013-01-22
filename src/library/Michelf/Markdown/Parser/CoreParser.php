@@ -9,8 +9,10 @@
  */
 namespace Michelf\Markdown\Parser;
 
+use Michelf\Markdown\Parser\ParserInterface;
+
 /**
- * This class was extracted from the `markdown.php` file by a build-script,
+ * This class was extracted from Michel Fortins PHP Markdown by a build-script,
  * DO NOT EDIT HERE!
  *
  * What was modified?
@@ -34,20 +36,37 @@ namespace Michelf\Markdown\Parser;
  * @link http://php.net/manual/en/language.references.pass.php} otherwise
  *		PHP 5.4 wil raise a fatal error.
  */
-class CoreParser
+class CoreParser implements ParserInterface
 {
-    const EMPTY_ELEMENT_SUFFIX = " />";
-    const TAB_WIDTH = 4;
-    const FN_LINK_TITLE = "";
-    const FN_BACKLINK_TITLE = "";
-    const FN_LINK_CLASS = "";
-    const FN_BACKLINK_CLASS = "";
+    ### Simple Function Interface ###
+
+    public static function defaultTransform($text)
+    {
+    #
+    # Initialize the parser and return the result of its transform method.
+    # This will work fine for derived classes too.
+    #
+        # Take parser class on which this function was called.
+        $parser_class = \get_called_class();
+
+        # try to take parser from the static parser list
+        static $parser_list;
+        $parser =& $parser_list[$parser_class];
+
+        # create the parser it not already set
+        if (!$parser)
+            $parser = new $parser_class;
+
+        # Transform text using parser.
+
+        return $parser->transform($text);
+    }
 
     ### Configuration Variables ###
 
     # Change to ">" for HTML output.
-    public $empty_element_suffix = self::EMPTY_ELEMENT_SUFFIX;
-    public $tab_width = self::TAB_WIDTH;
+    public $empty_element_suffix = " />";
+    public $tab_width = 4;
 
     # Change to `true` to disallow markup or entities.
     public $no_markup = false;
@@ -1409,12 +1428,16 @@ class CoreParser
                 |
                     <\?.*?\?> | <%.*?%>		# processing instruction
                 |
-                    <[/!$]?[-a-zA-Z0-9:_]+	# regular tags
+                    <[!$]?[-a-zA-Z0-9:_]+	# regular tags
                     (?>
                         \s
                         (?>[^"\'>]+|"[^"]*"|\'[^\']*\')*
                     )?
                     >
+                |
+                    <[-a-zA-Z0-9:_]+\s*/> # xml-style empty tag
+                |
+                    </[-a-zA-Z0-9:_]+\s*> # closing tag
             ').'
                 )
                 }xs';

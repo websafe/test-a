@@ -45,7 +45,7 @@ class ExtraParser extends CoreParser
     const FN_LINK_CLASS = "";
     const FN_BACKLINK_CLASS = "";
     const CODE_CLASS_PREFIX = "";
-    const CODE_ATTR_ON_PRE = false;
+    const ATTR_ON_PRE = false;
 
     ### Configuration Variables ###
 
@@ -59,12 +59,6 @@ class ExtraParser extends CoreParser
     # Optional class attribute for footnote links and backlinks.
     public $fn_link_class = self::FN_LINK_CLASS;
     public $fn_backlink_class = self::FN_BACKLINK_CLASS;
-
-    # Optional class prefix for fenced code block.
-    public $code_class_prefix = self::CODE_CLASS_PREFIX;
-    # Class attribute for code blocks goes on the `code` tag;
-    # setting this to true will put attributes on the `pre` tag instead.
-    public $code_attr_on_pre = self::CODE_ATTR_ON_PRE;
 
     # Predefined abbreviations.
     public $predef_abbr = array();
@@ -317,10 +311,10 @@ class ExtraParser extends CoreParser
                 |
                     # Fenced code block marker
                     (?> ^ | \n )
-                    [ ]{0,'.($indent+3).'}~{3,}
+                    [ ]{0,'.($indent).'}~~~+[ ]*
                                     [ ]*
                     (?:
-                        [.]?[-_:a-zA-Z0-9]+ # standalone class name
+                        [.][-_:a-zA-Z0-9]+ # standalone class name
                     |
                         '.$this->id_class_attr_nocatch_re.' # extra attributes
                     )?
@@ -388,16 +382,15 @@ class ExtraParser extends CoreParser
             #
             # Check for: Fenced code block marker.
             #
-            else if (preg_match('{^\n?([ ]{0,'.($indent+3).'})(~+)}', $tag, $capture)) {
+            else if (preg_match('{^\n?[ ]{0,'.($indent+3).'}~}', $tag)) {
                 # Fenced code block marker: find matching end marker.
-                $fence_indent = strlen($capture[1]); # use captured indent in re
-                $fence_re = $capture[2]; # use captured fence in re
-                if (preg_match('{^(?>.*\n)*?[ ]{'.($fence_indent).'}'.$fence_re.'[ ]*(?:\n|$)}', $text,
+                $tag_re = preg_quote(trim($tag));
+                if (preg_match('{^(?>.*\n)+?[ ]{0,'.($indent).'}'.$tag_re.'[ ]*\n}', $text,
                     $matches))
                 {
                     # End marker found: pass text unchanged until marker.
                     $parsed .= $tag . $matches[0];
-                    $text = "\n" . substr($text, strlen($matches[0]));
+                    $text = substr($text, strlen($matches[0]));
                 } else {
                     # No end marker: just skip it.
                     $parsed .= $tag;
@@ -1035,12 +1028,12 @@ class ExtraParser extends CoreParser
         if ($classname != "") {
             if ($classname{0} == '.')
                 $classname = substr($classname, 1);
-            $attr_str = ' class="'.$this->code_class_prefix.$classname.'"';
+            $attr_str = ' class="'.self::CODE_CLASS_PREFIX.$classname.'"';
         } else {
-            $attr_str = $this->doExtraAttributes($this->code_attr_on_pre ? "pre" : "code", $attrs);
+            $attr_str = $this->doExtraAttributes(self::ATTR_ON_PRE ? "pre" : "code", $attrs);
         }
-        $pre_attr_str  = $this->code_attr_on_pre ? $attr_str : '';
-        $code_attr_str = $this->code_attr_on_pre ? '' : $attr_str;
+        $pre_attr_str  = self::ATTR_ON_PRE ? $attr_str : '';
+        $code_attr_str = self::ATTR_ON_PRE ? '' : $attr_str;
         $codeblock  = "<pre$pre_attr_str><code$code_attr_str>$codeblock</code></pre>";
 
         return "\n\n".$this->hashBlock($codeblock)."\n\n";

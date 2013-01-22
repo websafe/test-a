@@ -160,7 +160,7 @@ class ExtraParser extends CoreParser implements ParserInterface
         if (empty($attr)) return "";
 
         # Split on components
-        preg_match_all('/[#.][-_:a-zA-Z0-9]+/', $attr, $matches);
+        preg_match_all("/[.#][-_:a-zA-Z0-9]+/", $attr, $matches);
         $elements = $matches[0];
 
         # handle classes and ids (only first id taken into account)
@@ -312,7 +312,7 @@ class ExtraParser extends CoreParser implements ParserInterface
                     [ ]{0,'.($indent+3).'}~{3,}
                                     [ ]*
                     (?:
-                    \.?[-_:a-zA-Z0-9]+ # standalone class name
+                        [.]?[-_:a-zA-Z0-9]+ # standalone class name
                     |
                         '.$this->id_class_attr_nocatch_re.' # extra attributes
                     )?
@@ -917,7 +917,7 @@ class ExtraParser extends CoreParser implements ParserInterface
             (?>\A\n?|\n\n+)					# leading line
             (								# definition terms = $1
                 [ ]{0,'.$less_than_tab.'}	# leading whitespace
-                (?!\:[ ]|[ ])				# negative lookahead for a definition
+                (?![:][ ]|[ ])				# negative lookahead for a definition
                                             #   mark (colon) or more whitespace.
                 (?> \S.* \n)+?				# actual term (not whitespace).
             )
@@ -931,12 +931,12 @@ class ExtraParser extends CoreParser implements ParserInterface
             \n(\n+)?						# leading line = $1
             (								# marker space = $2
                 [ ]{0,'.$less_than_tab.'}	# whitespace before colon
-                \:[ ]+						# definition mark (colon)
+                [:][ ]+						# definition mark (colon)
             )
             ((?s:.+?))						# definition text = $3
             (?= \n+ 						# stop at next definition mark,
                 (?:							# next term or end of text
-                    [ ]{0,'.$less_than_tab.'} \:[ ]	|
+                    [ ]{0,'.$less_than_tab.'} [:][ ]	|
                     <dt> | \z
                 )
             )
@@ -994,7 +994,7 @@ class ExtraParser extends CoreParser implements ParserInterface
                 )
                 [ ]*
                 (?:
-                    \.?([-_:a-zA-Z0-9]+) # 2: standalone class name
+                    [.]?([-_:a-zA-Z0-9]+) # 2: standalone class name
                 |
                     '.$this->id_class_attr_catch_re.' # 3: Extra attributes
                 )?

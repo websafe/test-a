@@ -316,7 +316,7 @@ class ExtraParser extends CoreParser
                     )*
                 |
                     # Fenced code block marker
-                    (?<= ^ | \n )
+                    (?> ^ | \n )
                     [ ]{0,'.($indent+3).'}~{3,}
                                     [ ]*
                     (?:
@@ -397,7 +397,7 @@ class ExtraParser extends CoreParser
                 {
                     # End marker found: pass text unchanged until marker.
                     $parsed .= $tag . $matches[0];
-                    $text = substr($text, strlen($matches[0]));
+                    $text = "\n" . substr($text, strlen($matches[0]));
                 } else {
                     # No end marker: just skip it.
                     $parsed .= $tag;

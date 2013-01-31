@@ -12,18 +12,8 @@ namespace Michelf\Markdown\Parser;
 use Michelf\Markdown\Parser\ParserInterface;
 
 /**
- * This class was extracted from Michel Fortins PHP Markdown by a build-script,
- * DO NOT EDIT HERE!
- *
- * What was modified?
- *
- * + Classes were extracted into separate files.
- * + Classes were renamed.
- * + A namespace was added.
- * + The class constructor was renamed.
- * + Some unused constants were removed.
- * + Code was formatted using PHP-CS-Fixer
- * + Documentation was generated using phpdocumentor2
+ * This class was extracted from Michel Fortin's PHP Markdown
+ * by a build-script. DO NOT EDIT HERE!
  *
  * @package Michelf_Markdown_Parser
  * @author Michel Fortin, <http://michelf.com/>
@@ -31,13 +21,11 @@ use Michelf\Markdown\Parser\ParserInterface;
  * @link http://michelf.com/projects/php-markdown/
  * @todo Add DocBlock for class properties.
  * @todo Add DocBlock for class methods.
- * @fixme Get rid of constants, use class options/config and defaults.
- * @fixme Stop passing $this as reference
- * @link http://php.net/manual/en/language.references.pass.php} otherwise
- *		PHP 5.4 wil raise a fatal error.
  */
 class CoreParser implements ParserInterface
 {
+    const  MARKDOWNLIB_VERSION  =  "1.3-beta4";
+
     ### Simple Function Interface ###
 
     public static function defaultTransform($text)
@@ -76,6 +64,7 @@ class CoreParser implements ParserInterface
     public $predef_urls = array();
     public $predef_titles = array();
 
+
     ### Parser Implementation ###
 
     # Regex to match balanced [brackets].
@@ -89,6 +78,7 @@ class CoreParser implements ParserInterface
     # Table of hash values for escaped characters:
     public $escape_chars = '\`*_{}[]()>#+-.!';
     public $escape_chars_re;
+
 
     public function __construct()
     {
@@ -114,6 +104,7 @@ class CoreParser implements ParserInterface
         asort($this->span_gamut);
     }
 
+
     # Internal hashes used during transformation.
     public $urls = array();
     public $titles = array();
@@ -121,6 +112,7 @@ class CoreParser implements ParserInterface
 
     # Status flag to avoid invalid nesting.
     public $in_anchor = false;
+
 
     public function setup()
     {
@@ -146,6 +138,7 @@ class CoreParser implements ParserInterface
         $this->titles = array();
         $this->html_hashes = array();
     }
+
 
     public function transform($text)
     {
@@ -194,6 +187,7 @@ class CoreParser implements ParserInterface
         "runBasicBlockGamut"   => 30,
         );
 
+
     public function stripLinkDefinitions($text)
     {
     #
@@ -239,6 +233,7 @@ class CoreParser implements ParserInterface
 
         return ''; # String that will replace the block
     }
+
 
     public function hashHTMLBlocks($text)
     {

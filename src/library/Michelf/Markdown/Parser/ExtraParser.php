@@ -13,18 +13,8 @@ use Michelf\Markdown\Parser\ParserInterface;
 use Michelf\Markdown\Parser\CoreParser;
 
 /**
- * This class was extracted from Michel Fortins PHP Markdown by a build-script,
- * DO NOT EDIT HERE!
- *
- * What was modified?
- *
- * + Classes were extracted into separate files.
- * + Classes were renamed.
- * + A namespace was added.
- * + The class constructor was renamed.
- * + Some unused constants were removed.
- * + Code was formatted using PHP-CS-Fixer
- * + Documentation was generated using phpdocumentor2
+ * This class was extracted from Michel Fortin's PHP Markdown
+ * by a build-script. DO NOT EDIT HERE!
  *
  * @package Michelf_Markdown_Parser
  * @author Michel Fortin, <http://michelf.com/>
@@ -32,10 +22,6 @@ use Michelf\Markdown\Parser\CoreParser;
  * @link http://michelf.com/projects/php-markdown/
  * @todo Add DocBlock for class properties.
  * @todo Add DocBlock for class methods.
- * @fixme Get rid of constants, use class options/config and defaults.
- * @fixme Stop passing $this as reference
- * @link http://php.net/manual/en/language.references.pass.php} otherwise
- *		PHP 5.4 wil raise a fatal error.
  */
 class ExtraParser extends CoreParser implements ParserInterface
 {
@@ -49,8 +35,8 @@ class ExtraParser extends CoreParser implements ParserInterface
     public $fn_backlink_title = "";
 
     # Optional class attribute for footnote links and backlinks.
-    public $fn_link_class = "";
-    public $fn_backlink_class = "";
+    public $fn_link_class = "footnote-ref";
+    public $fn_backlink_class = "footnote-backref";
 
     # Optional class prefix for fenced code block.
     public $code_class_prefix = "";
@@ -60,6 +46,7 @@ class ExtraParser extends CoreParser implements ParserInterface
 
     # Predefined abbreviations.
     public $predef_abbr = array();
+
 
     ### Parser Implementation ###
 
@@ -93,6 +80,7 @@ class ExtraParser extends CoreParser implements ParserInterface
         parent::__construct();
     }
 
+
     # Extra variables used during extra transformations.
     public $footnotes = array();
     public $footnotes_ordered = array();
@@ -103,6 +91,7 @@ class ExtraParser extends CoreParser implements ParserInterface
 
     # Give the current footnote number.
     public $footnote_counter = 1;
+
 
     public function setup()
     {
@@ -141,6 +130,7 @@ class ExtraParser extends CoreParser implements ParserInterface
 
         parent::teardown();
     }
+
 
     ### Extra Attribute Parser ###
 
@@ -186,6 +176,7 @@ class ExtraParser extends CoreParser implements ParserInterface
         return $attr_str;
     }
 
+
     ### HTML Block Parser ###
 
     # Tags that are always treated as block tags:
@@ -203,6 +194,7 @@ class ExtraParser extends CoreParser implements ParserInterface
 
     # Tags that do not need to be closed.
     public $auto_close_tags_re = 'hr|img|param|source|track';
+
 
     public function hashHTMLBlocks($text)
     {
@@ -321,7 +313,6 @@ class ExtraParser extends CoreParser implements ParserInterface
                 ' : '' ). ' # End (if not is span).
                 )
             }xs';
-
 
         $depth = 0;		# Current depth inside the tag tree.
         $parsed = "";	# Parsed text that will be returned.
@@ -1236,7 +1227,6 @@ class ExtraParser extends CoreParser implements ParserInterface
                 $ref_count_mark = $this->footnotes_ref_count[$node_id] += 1;
             }
 
-            $attr = " rel=\"footnote\"";
             if ($this->fn_link_class != "") {
                 $class = $this->fn_link_class;
                 $class = $this->encodeAttribute($class);

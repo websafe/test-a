@@ -9,19 +9,11 @@
  */
 namespace Michelf\Markdown\Parser;
 
+use Michelf\Markdown\Parser\ParserInterface;
+
 /**
- * This class was extracted from the `markdown.php` file by a build-script,
- * DO NOT EDIT HERE!
- *
- * What was modified?
- *
- * + Classes were extracted into separate files.
- * + Classes were renamed.
- * + A namespace was added.
- * + The class constructor was renamed.
- * + Some unused constants were removed.
- * + Code was formatted using PHP-CS-Fixer
- * + Documentation was generated using phpdocumentor2
+ * This class was extracted from Michel Fortin's PHP Markdown
+ * by a build-script. DO NOT EDIT HERE!
  *
  * @package Michelf_Markdown_Parser
  * @author Michel Fortin, <http://michelf.com/>
@@ -29,25 +21,40 @@ namespace Michelf\Markdown\Parser;
  * @link http://michelf.com/projects/php-markdown/
  * @todo Add DocBlock for class properties.
  * @todo Add DocBlock for class methods.
- * @fixme Get rid of constants, use class options/config and defaults.
- * @fixme Stop passing $this as reference
- * @link http://php.net/manual/en/language.references.pass.php} otherwise
- *		PHP 5.4 wil raise a fatal error.
  */
-class CoreParser
+class CoreParser implements ParserInterface
 {
-    const EMPTY_ELEMENT_SUFFIX = " />";
-    const TAB_WIDTH = 4;
-    const FN_LINK_TITLE = "";
-    const FN_BACKLINK_TITLE = "";
-    const FN_LINK_CLASS = "";
-    const FN_BACKLINK_CLASS = "";
+    const  MARKDOWNLIB_VERSION  =  "1.3-beta4";
+
+    ### Simple Function Interface ###
+
+    public static function defaultTransform($text)
+    {
+    #
+    # Initialize the parser and return the result of its transform method.
+    # This will work fine for derived classes too.
+    #
+        # Take parser class on which this function was called.
+        $parser_class = \get_called_class();
+
+        # try to take parser from the static parser list
+        static $parser_list;
+        $parser =& $parser_list[$parser_class];
+
+        # create the parser it not already set
+        if (!$parser)
+            $parser = new $parser_class;
+
+        # Transform text using parser.
+
+        return $parser->transform($text);
+    }
 
     ### Configuration Variables ###
 
     # Change to ">" for HTML output.
-    public $empty_element_suffix = self::EMPTY_ELEMENT_SUFFIX;
-    public $tab_width = self::TAB_WIDTH;
+    public $empty_element_suffix = " />";
+    public $tab_width = 4;
 
     # Change to `true` to disallow markup or entities.
     public $no_markup = false;
@@ -56,6 +63,7 @@ class CoreParser
     # Predefined urls and titles for reference links and images.
     public $predef_urls = array();
     public $predef_titles = array();
+
 
     ### Parser Implementation ###
 
@@ -70,6 +78,7 @@ class CoreParser
     # Table of hash values for escaped characters:
     public $escape_chars = '\`*_{}[]()>#+-.!';
     public $escape_chars_re;
+
 
     public function __construct()
     {
@@ -95,6 +104,7 @@ class CoreParser
         asort($this->span_gamut);
     }
 
+
     # Internal hashes used during transformation.
     public $urls = array();
     public $titles = array();
@@ -102,6 +112,7 @@ class CoreParser
 
     # Status flag to avoid invalid nesting.
     public $in_anchor = false;
+
 
     public function setup()
     {
@@ -127,6 +138,7 @@ class CoreParser
         $this->titles = array();
         $this->html_hashes = array();
     }
+
 
     public function transform($text)
     {
@@ -175,6 +187,7 @@ class CoreParser
         "runBasicBlockGamut"   => 30,
         );
 
+
     public function stripLinkDefinitions($text)
     {
     #
@@ -220,6 +233,7 @@ class CoreParser
 
         return ''; # String that will replace the block
     }
+
 
     public function hashHTMLBlocks($text)
     {
